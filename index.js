@@ -18,6 +18,23 @@ module.exports = {
     },
 
     /**
+     * Finds ancestor elements of a given node.
+     *
+     * @param   {HTMLElement}   element     An HTMLElement
+     * @param   {Integer|Null}  limit       The number of ancestor elements to return, or NULL to return all
+     * @return  {Array}         The ancestor node, or null if no common ancestor could be found
+     */
+    'getAncestry' : function(element, limit) {
+        var ancestry = [];
+
+        while((element = element.parentElement) && (!limit || (ancestry.length < limit))) {
+            ancestry.push(element);
+        }
+
+        return ancestry;
+    },
+
+    /**
      * Given a list of nodes, finds the common ancestor element.
      *
      * @param   {HTMLElement|Array|NodeList|String}     elements    One or more HTMLElements or a CSS selector
