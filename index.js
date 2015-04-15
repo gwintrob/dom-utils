@@ -7,7 +7,7 @@ module.exports = {
      */
     'toElementArray' : function(elements) {
         if(typeof elements === 'string') {
-            return this.toElementArray(document.querySelector(elements));
+            return this.toElementArray(document.querySelectorAll(elements));
         } else if(elements instanceof HTMLElement) {
             return [elements];
         } else {
