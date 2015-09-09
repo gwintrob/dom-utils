@@ -2,18 +2,34 @@ module.exports = {
     /**
      * Normalizes a collection of elements into a native array of elements.
      *
-     * @param   {HTMLElement|Array|NodeList|String}     elements    One or more HTMLElements or a CSS selector
+     * @param   {HTMLElement|Array|NodeList|String}     elements    One or more HTMLElements or a CSS/xpath selector
+     * @param   {Boolean}                               isXpath     Evaluate the elements selector as xpath
      * @return  {HTMLElement}                                       An array of HTMLElements
      */
-    'toElementArray' : function(elements) {
+    'toElementArray' : function(elements, isXpath) {
         if(typeof elements === 'string') {
-            return this.toElementArray(document.querySelectorAll(elements));
+            if (!isXpath) {
+                return this.toElementArray(document.querySelectorAll(elements));
+            }
+
+            var nodes = [],
+                iterator = document.evaluate(elements, document.body),
+                node = iterator.iterateNext();
+
+            while (node) {
+              nodes.push(node);
+              node = iterator.iterateNext();
+            }
+
+            return this.toElementArray(nodes);
         } else if(elements instanceof HTMLElement) {
             return [elements];
         } else {
-            return ((elements !== null) && elements.length)
-                ? Array.prototype.slice.call(elements)
-                : [];
+            if (elements === null || !elements.length) {
+                return [];
+            }
+
+            return Array.prototype.slice.call(elements);
         }
     },
 
